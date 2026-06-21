@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SemprAI — Réponse automatique par IA pour vos emails clients</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:     #003580;
+    --navy2:    #00224f;
+    --blue:     #0071c2;
+    --blue-h:   #005fa3;
+    --accent:   #f97316;
+    --accent2:  #ea580c;
+    --bg:       #ffffff;
+    --bg2:      #f2f5f9;
+    --bg3:      #e8eef7;
+    --text:     #1a1a2e;
+    --sub:      #4a5568;
+    --muted:    #718096;
+    --border:   #d4dce8;
+    --success:  #0070d2;
+    --shadow-s: 0 1px 4px rgba(0,0,0,0.08);
+    --shadow-m: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-l: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--navy);
+    position: sticky; top: 0; z-index: 200;
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .logo { font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.02em; }
+  .logo span { color: var(--accent); }
+
+  .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+  .nav-link { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 0.45rem 0.9rem; border-radius: 6px; transition: all 0.2s; }
+  .nav-link:hover { color: #fff; background: rgba(255,255,255,0.12); }
+
+  .btn-nav {
+    background: var(--accent); color: #fff !important;
+    font-weight: 700; padding: 0.5rem 1.3rem; border-radius: 6px;
+    font-size: 0.9rem; transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(249,115,22,0.4);
+  }
+  .btn-nav:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, var(--navy2) 0%, var(--navy) 55%, #005dab 100%);
+    padding: 5rem 5vw 4rem;
+    color: #fff;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .hero-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+
+  .hero-left { z-index: 1; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    color: #93c5fd; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 0.35rem 1rem; border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #93c5fd; animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 1.2rem; }
+  h1 em { font-style: normal; color: #93c5fd; }
+
+  .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.75); line-height: 1.75; margin-bottom: 2.2rem; max-width: 480px; }
+
+  .hero-cta { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 2rem; }
+
+  .hero-badges { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .badge { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: rgba(255,255,255,0.65); }
+  .badge-check { color: #93c5fd; font-weight: 700; }
+
+  /* Hero card mockup */
+  .hero-right { z-index: 1; }
+  .mockup {
+    background: var(--bg); border-radius: 14px; padding: 1.5rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    opacity: 0; animation: slideIn 0.7s 0.4s ease forwards;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  .mockup-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .mockup-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--bg3); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .mockup-from { font-size: 0.8rem; }
+  .mockup-name { font-weight: 600; color: var(--text); font-size: 0.88rem; }
+  .mockup-time { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+  .mockup-subject { font-weight: 600; font-size: 0.88rem; color: var(--text); margin-bottom: 0.5rem; }
+  .mockup-body { font-size: 0.82rem; color: var(--sub); line-height: 1.6; margin-bottom: 1.2rem; }
+
+  .mockup-reply { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; border-radius: 10px; padding: 1rem; }
+  .mockup-reply-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem; }
+  .ai-badge { background: var(--blue); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; }
+  .mockup-reply-text { font-size: 0.82rem; color: var(--sub); line-height: 1.6; }
+  .mockup-reply-time { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
+  .time-green { color: #16a34a; font-weight: 600; }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 0.95rem;
+    padding: 0.78rem 1.8rem; border-radius: 8px; text-decoration: none;
+    border: none; cursor: pointer; font-family: 'Inter', sans-serif;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    box-shadow: 0 4px 14px rgba(249,115,22,0.35);
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(249,115,22,0.45); }
+
+  .btn-outline {
+    background: transparent; color: #fff; font-weight: 600; font-size: 0.95rem;
+    padding: 0.78rem 1.8rem; border-radius: 8px; text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.7); }
+
+  .btn-blue {
+    background: var(--blue); color: #fff; font-weight: 700; font-size: 0.95rem;
+    padding: 0.78rem 1.8rem; border-radius: 8px; text-decoration: none;
+    border: none; cursor: pointer; font-family: 'Inter', sans-serif;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    box-shadow: 0 4px 14px rgba(0,113,194,0.3);
+    transition: all 0.2s;
+  }
+  .btn-blue:hover { background: var(--blue-h); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,113,194,0.4); }
+
+  /* ── STATS ── */
+  .stats-bar { background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .stats-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 2rem 1.5rem; text-align: center; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-size: 2.2rem; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 0.3rem; display: block; }
+  .stat-label { font-size: 0.82rem; color: var(--sub); line-height: 1.45; }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 5vw; }
+  .section-inner { max-width: 1080px; margin: 0 auto; }
+
+  .section-tag {
+    display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--blue);
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    padding: 0.3rem 0.9rem; border-radius: 100px; margin-bottom: 1rem;
+  }
+
+  h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin-bottom: 1rem; color: var(--text); }
+  h2 em { font-style: normal; color: var(--blue); }
+  .section-sub { color: var(--sub); font-size: 1.05rem; max-width: 520px; line-height: 1.75; }
+
+  /* ── PROBLEM ── */
+  .problem { background: var(--bg); }
+  .problem-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .problem-cards { display: flex; flex-direction: column; gap: 1rem; }
+
+  .pcard {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.3rem 1.5rem; display: flex; gap: 1rem; align-items: flex-start;
+    transition: all 0.2s;
+  }
+  .pcard:hover { border-color: #bfdbfe; background: #eff6ff; transform: translateX(4px); box-shadow: var(--shadow-s); }
+  .pcard-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .pcard-title { font-weight: 600; font-size: 0.93rem; margin-bottom: 0.2rem; color: var(--text); }
+  .pcard-text { font-size: 0.86rem; color: var(--sub); line-height: 1.55; }
+
+  /* ── HOW ── */
+  .how { background: var(--bg2); }
+  .how-header { margin-bottom: 3.5rem; }
+  .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; position: relative; }
+  .steps::before {
+    content: '';
+    position: absolute; top: 28px; left: calc(16.66% + 1rem); right: calc(16.66% + 1rem);
+    height: 2px; background: linear-gradient(to right, var(--border), var(--blue), var(--border));
+    z-index: 0;
+  }
+  .step {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.8rem; text-align: center; position: relative; z-index: 1;
+    transition: all 0.25s;
+  }
+  .step:hover { border-color: var(--blue); box-shadow: var(--shadow-m); transform: translateY(-4px); }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--navy); color: #fff;
+    font-weight: 800; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+  .step p { font-size: 0.87rem; color: var(--sub); line-height: 1.65; }
+
+  /* ── FEATURES ── */
+  .features { background: var(--bg); }
+  .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; margin-top: 3.5rem; }
+  .feat {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.6rem; transition: all 0.2s;
+  }
+  .feat:hover { border-color: #bfdbfe; box-shadow: var(--shadow-m); transform: translateY(-3px); }
+  .feat-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: #dbeafe; display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 1rem;
+  }
+  .feat h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text); }
+  .feat p { font-size: 0.86rem; color: var(--sub); line-height: 1.6; }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    background: linear-gradient(135deg, var(--navy2), var(--navy));
+    padding: 5rem 5vw; text-align: center; color: #fff;
+  }
+  .cta-banner h2 { color: #fff; margin-bottom: 0.8rem; }
+  .cta-banner p { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 2.2rem; }
+
+  /* ── CONTACT ── */
+  .contact { background: var(--bg2); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start; }
+
+  .contact-left h2 { margin-bottom: 0.8rem; }
+  .contact-left > p { color: var(--sub); font-size: 0.93rem; line-height: 1.75; margin-bottom: 2rem; }
+
+  .promises { display: flex; flex-direction: column; gap: 0.8rem; }
+  .promise { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--sub); }
+  .pcheck { width: 22px; height: 22px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.7rem; color: var(--blue); font-weight: 800; }
+
+  .contact-box {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2.5rem; box-shadow: var(--shadow-m);
+  }
+  .contact-box h3 { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text); font-family: 'Inter', sans-serif;
+    font-size: 0.9rem; padding: 0.72rem 0.9rem; transition: all 0.2s; outline: none; appearance: none;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,113,194,0.1);
+  }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-group select option { background: var(--bg); }
+  .form-submit { width: 100%; margin-top: 0.5rem; justify-content: center; font-size: 0.95rem; padding: 0.85rem; }
+  .form-note { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 0.7rem; }
+  .success-msg { display: none; margin-top: 1rem; text-align: center; padding: 1rem; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; color: #15803d; font-weight: 600; font-size: 0.9rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy2); color: rgba(255,255,255,0.6);
+    padding: 2rem 5vw;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    font-size: 0.84rem;
+  }
+  footer .logo { font-size: 1.15rem; }
+  footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  footer a:hover { color: #fff; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .d1 { transition-delay: 0.08s; }
+  .d2 { transition-delay: 0.16s; }
+  .d3 { transition-delay: 0.24s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .problem-inner, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .steps, .features-grid { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2,1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-link:not(.btn-nav) { display: none; }
+    .steps::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Sempr<span>AI</span></a>
+  <div class="nav-links">
+    <a href="#problem" class="nav-link">Le problème</a>
+    <a href="#how" class="nav-link">Comment ça marche</a>
+    <a href="#features" class="nav-link">Fonctionnalités</a>
+    <a href="#contact" class="nav-link btn-nav">Demander une démo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow" style="opacity:0;animation:slideIn 0.6s 0.1s ease forwards"><span class="dot"></span> Intelligence artificielle · Email automatique</div>
+      <h1 style="opacity:0;animation:slideIn 0.6s 0.2s ease forwards">Ne perdez plus de clients<br>à cause d'un <em>mail sans réponse</em></h1>
+      <p class="hero-sub" style="opacity:0;animation:slideIn 0.6s 0.3s ease forwards">SemprAI répond automatiquement à vos emails clients, 24h/24 et 7j/7, avec les bonnes informations et le bon ton — même quand vos équipes ne sont pas là.</p>
+      <div class="hero-cta" style="opacity:0;animation:slideIn 0.6s 0.4s ease forwards">
+        <a href="#contact" class="btn-primary">Demander une démo gratuite</a>
+        <a href="#how" class="btn-outline">Voir comment ça marche</a>
+      </div>
+      <div class="hero-badges" style="opacity:0;animation:slideIn 0.6s 0.5s ease forwards">
+        <span class="badge"><span class="badge-check">✓</span> Sans engagement</span>
+        <span class="badge"><span class="badge-check">✓</span> Opérationnel en 48h</span>
+        <span class="badge"><span class="badge-check">✓</span> Conforme RGPD</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="mockup">
+        <div class="mockup-header">
+          <div class="mockup-avatar">👤</div>
+          <div class="mockup-from">
+            <div class="mockup-name">Martin Leroy — Client</div>
+            <div style="font-size:0.75rem;color:var(--muted)">martin.leroy@gmail.com</div>
+          </div>
+          <div class="mockup-time">Il y a 2 min</div>
+        </div>
+        <div class="mockup-subject">Demande de tarif urgente</div>
+        <div class="mockup-body">Bonjour, je suis intéressé par vos services mais j'ai besoin d'un devis rapidement. Pouvez-vous me rappeler ou m'envoyer vos tarifs ? C'est assez urgent, merci.</div>
+        <div class="mockup-reply">
+          <div class="mockup-reply-label"><span class="ai-badge">IA</span> Réponse automatique SemprAI</div>
+          <div class="mockup-reply-text">Bonjour Martin, merci pour votre message ! Je reviens vers vous immédiatement avec nos tarifs. Notre offre de base commence à 99€/mois et inclut… Un conseiller vous contactera dans la journée pour affiner votre devis. Bonne journée !</div>
+          <div class="mockup-reply-time">⚡ Envoyé en <span class="time-green">18 secondes</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat reveal">
+      <span class="stat-num">62%</span>
+      <div class="stat-label">des clients ne rappellent plus<br>après un mail ignoré</div>
+    </div>
+    <div class="stat reveal d1">
+      <span class="stat-num">&lt; 30s</span>
+      <div class="stat-label">temps de réponse moyen<br>avec SemprAI</div>
+    </div>
+    <div class="stat reveal d2">
+      <span class="stat-num">24/7</span>
+      <div class="stat-label">disponible en permanence,<br>même hors horaires</div>
+    </div>
+    <div class="stat reveal d3">
+      <span class="stat-num">−80%</span>
+      <div class="stat-label">de mails sans réponse<br>dès la première semaine</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="section-inner">
+    <div class="problem-inner">
+      <div class="reveal">
+        <div class="section-tag">Le problème</div>
+        <h2>Chaque mail sans réponse<br>est un client <em>potentiellement perdu</em></h2>
+        <p class="section-sub" style="margin-top:1rem">Pendant vos nuits, weekends et congés, vos clients continuent d'écrire. S'ils n'ont pas de réponse, ils vont ailleurs.</p>
+      </div>
+      <div class="problem-cards">
+        <div class="pcard reveal d1">
+          <span class="pcard-icon">📉</span>
+          <div>
+            <div class="pcard-title">Vous perdez des prospects chauds</div>
+            <div class="pcard-text">Un prospect sans réponse dans l'heure est 7× plus susceptible d'aller chez la concurrence.</div>
+          </div>
+        </div>
+        <div class="pcard reveal d2">
+          <span class="pcard-icon">😤</span>
+          <div>
+            <div class="pcard-title">Vos clients se sentent délaissés</div>
+            <div class="pcard-text">Le silence est perçu comme un manque d'intérêt. Même une réponse simple suffit à maintenir la confiance.</div>
+          </div>
+        </div>
+        <div class="pcard reveal d3">
+          <span class="pcard-icon">😓</span>
+          <div>
+            <div class="pcard-title">Vos équipes croulent sous les mails</div>
+            <div class="pcard-text">Le lundi matin, la boîte est saturée. Vos équipes gèrent l'urgence au lieu de leurs vraies priorités.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="section-inner">
+    <div class="how-header reveal">
+      <div class="section-tag">Comment ça marche</div>
+      <h2>Opérationnel en 3 étapes</h2>
+      <p class="section-sub">Pas de migration, pas de formation. On s'intègre à vos outils existants en moins de 48h.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-icon">🔌</div>
+        <h3>Connexion à votre messagerie</h3>
+        <p>On se connecte à Gmail, Outlook ou n'importe quel autre outil en quelques clics. Rien à changer de votre côté.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-num">2</div>
+        <div class="step-icon">🧠</div>
+        <h3>L'IA apprend votre entreprise</h3>
+        <p>On lui transmet vos informations, votre ton, vos produits, vos FAQ. Elle répondra exactement comme vous le feriez.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-num">3</div>
+        <div class="step-icon">✉️</div>
+        <h3>Elle répond, vous supervisez</h3>
+        <p>Chaque mail reçoit une réponse immédiate. Vous gardez la main sur les cas complexes via un tableau de bord simple.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">Fonctionnalités</div>
+      <h2>Tout ce dont vous avez besoin,<br>sans la complexité</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat reveal">
+        <div class="feat-icon">🎯</div>
+        <h3>Réponses intelligentes</h3>
+        <p>L'IA comprend l'intention du mail et répond de façon précise et adaptée — pas un message générique.</p>
+      </div>
+      <div class="feat reveal d1">
+        <div class="feat-icon">🗣️</div>
+        <h3>Votre ton, votre style</h3>
+        <p>Formel, chaleureux ou technique — l'IA adopte exactement la voix de votre marque.</p>
+      </div>
+      <div class="feat reveal d2">
+        <div class="feat-icon">🌍</div>
+        <h3>Multilingue automatique</h3>
+        <p>L'IA détecte la langue du client et répond dans la sienne. Automatiquement.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-icon">📊</div>
+        <h3>Tableau de bord clair</h3>
+        <p>Suivez tous les échanges, repérez les cas à traiter et consultez vos statistiques en un coup d'œil.</p>
+      </div>
+      <div class="feat reveal d1">
+        <div class="feat-icon">🔒</div>
+        <h3>Données sécurisées</h3>
+        <p>Hébergement en Europe, conformité RGPD, chiffrement de bout en bout. Vos données restent privées.</p>
+      </div>
+      <div class="feat reveal d2">
+        <div class="feat-icon">📈</div>
+        <h3>S'améliore dans le temps</h3>
+        <p>L'IA apprend de vos retours semaine après semaine. Plus elle tourne, plus elle devient précise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="reveal">
+    <h2>Prêt à ne plus perdre de clients ?</h2>
+    <p>Aucun engagement. Résultats visibles en 48h.</p>
+    <a href="#contact" class="btn-primary">Demander ma démo gratuite →</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-left reveal">
+        <div class="section-tag">Nous contacter</div>
+        <h2>Parlons de votre situation</h2>
+        <p>Remplissez le formulaire et on vous recontacte sous 24h pour organiser une démonstration gratuite, sans engagement.</p>
+        <div class="promises">
+          <div class="promise"><div class="pcheck">✓</div> Réponse garantie sous 24h</div>
+          <div class="promise"><div class="pcheck">✓</div> Démo adaptée à votre secteur</div>
+          <div class="promise"><div class="pcheck">✓</div> Aucun contrat, aucune obligation</div>
+          <div class="promise"><div class="pcheck">✓</div> Accompagnement à l'onboarding inclus</div>
+        </div>
+      </div>
+      <div class="contact-box reveal d1">
+        <h3>Demander une démo gratuite</h3>
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-group"><label>Prénom *</label><input type="text" placeholder="Jean" required></div>
+            <div class="form-group"><label>Nom *</label><input type="text" placeholder="Dupont" required></div>
+          </div>
+          <div class="form-group"><label>Email professionnel *</label><input type="email" placeholder="jean@entreprise.com" required></div>
+          <div class="form-group"><label>Entreprise</label><input type="text" placeholder="Nom de votre société"></div>
+          <div class="form-group">
+            <label>Volume de mails reçus par jour</label>
+            <select>
+              <option value="">Sélectionner…</option>
+              <option>Moins de 50</option>
+              <option>50 – 200</option>
+              <option>200 – 500</option>
+              <option>Plus de 500</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Votre besoin (optionnel)</label><textarea placeholder="Décrivez rapidement votre situation…"></textarea></div>
+          <button type="submit" class="btn-blue form-submit">Envoyer ma demande →</button>
+          <p class="form-note">🔒 Vos données sont protégées et ne seront jamais revendues.</p>
+          <div class="success-msg" id="successMsg">✅ Message envoyé ! On vous recontacte dans les 24h.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">Sempr<span style="color:var(--accent)">AI</span></a>
+  <div>© 2025 SemprAI · Tous droits réservés</div>
+  <div>Fait pour les équipes qui ne veulent plus perdre de clients</div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(r => io.observe(r));
+
+  // Form → Formspree
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.form-submit');
+    btn.textContent = 'Envoi en cours…'; btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/xgodvoqr', {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        this.querySelectorAll('input, textarea, select, button').forEach(el => el.disabled = true);
+        document.getElementById('successMsg').style.display = 'block';
+        btn.textContent = '✓ Envoyé !';
+      } else {
+        btn.textContent = 'Erreur — réessayez'; btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Erreur réseau — réessayez'; btn.disabled = false;
+    }
+  });
+
+  // Smooth anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
